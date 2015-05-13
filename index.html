@@ -13,7 +13,6 @@
       <div data-role="header" class="jqm-header">
         <h1>FIN Watch Settings</h1>
       </div>
-
       <div data-role="content">
 
 <div data-role="collapsible-set" data-theme="c" data-content-theme="d" data-mini="false">
@@ -22,21 +21,17 @@
 
 <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
     <legend>Weather Location Settings</legend>
-        <input name="key0" id="key0-0" data-type="int" value="0" checked="checked" type="radio">
+        <input name="key0" id="key0-0" data-type="int" value="0" checked="checked" type="radio" onclick="script:visability();">
         <label for="key0-0">Use phone gps signal!</label>
-        <input name="key0" id="key0-1" data-type="int" value="1" type="radio">
-        <label for="key0-1">Use this location:</label>
+        <input name="key0" id="key0-1" data-type="int" value="1" type="radio" onclick="script:visability();">
+        <label for="key0-1">Use own location</label>
 </fieldset>
 
-<!--<fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
-    <legend>Option 2</legend>
-        <input name="key1" id="key1-0" data-type="int" value="0" checked="checked" type="radio">
-        <label for="key1-0">Choice 1</label>
-        <input name="key1" id="key1-1" data-type="int" value="1" type="radio">
-        <label for="key1-1">Choice 2</label>
-        <input name="key1" id="key1-2" data-type="int" value="2" type="radio">
-        <label for="key1-2">Choice 3</label>
-</fieldset>-->
+<fieldset  id="locEnter" data-role="controlgroup" data-type="vertical" data-mini="true" style="visibility:hidden">
+    <legend>Enter Location</legend>
+        <input name="key1" id="key1-0" data-type="int" value="Cityname" checked="checked" type="input">
+        <label for="key1-0">This city</label>
+</fieldset>
 
 </div>
 <br />
@@ -49,11 +44,22 @@
       </div>
     </div>
     <script>
+		visability();
+		function visability() {
+			if (document.getElementById('key0-1').checked) {
+				document.getElementById('locEnter').style.visibility = 'visible';
+			}
+			else document.getElementById('locEnter').style.visibility = 'hidden';
+
+		}
+
+	
       function saveOptions() {
         var options = {
-          'option0':     Number( $("input[name=key0]:checked").val() )
-        } //'option1':     Number( $("input[name=key1]:checked").val() )
-        return options;
+          'option0':     Number( $("input[name=key0]:checked").val() ),
+		  'option1':     Number( $("input[name=key1]:checked").val() )
+        }
+		return options;
       }
       $().ready(function() {
        if (typeof window.localStorage !== "undefined") {
@@ -63,8 +69,8 @@
           // the Pebble webview dies on the next line...
           $("input[name=key0][id=key0-"+ls_pto["option0"]+"]").prop('checked',true);
           $("input[name=key0]").checkboxradio('refresh');
-          //$("input[name=key1][id=key1-"+ls_pto["option1"]+"]").prop('checked',true);
-          //$("input[name=key1]").checkboxradio('refresh');
+          $("input[name=key1][id=key1-"+ls_pto["option1"]+"]").prop('checked',true);
+          $("input[name=key1]").checkboxradio('refresh');
         }
        }
         $("#b-cancel").click(function() {
